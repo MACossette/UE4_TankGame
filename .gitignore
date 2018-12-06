@@ -1,4 +1,5 @@
 *.VC.db
+*.pdb
 
 # Visual Studio 2015 user specific files
 .vs/
