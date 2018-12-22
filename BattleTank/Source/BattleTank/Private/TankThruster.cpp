@@ -2,6 +2,28 @@
 
 #include "TankThruster.h"
 
+UTankThruster::UTankThruster()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTankThruster::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+
+	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
+
+	//Calculate the slipping speed
+	auto SlippageSpeed = FVector::DotProduct(TankRoot->GetRightVector(), TankRoot->GetComponentVelocity());
+
+	//Workout the necessary acceleration to correct
+	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * TankRoot->GetRightVector();
+
+	//Calculate and apply sideways force
+	
+	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration)/2.0;
+	TankRoot->AddForce(CorrectionForce);
+
+}
 
 void UTankThruster::SetForce(float Force) 
 {
