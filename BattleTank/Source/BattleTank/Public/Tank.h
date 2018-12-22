@@ -10,7 +10,6 @@
 class UTankBarrel;
 class UTankTurret;
 class UTankThruster;
-class UTankAimingComponent;
 class AProjectile;
 
 UCLASS()
@@ -22,20 +21,8 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	void AimAt(FVector HitLocation);
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetThrusterReference(UTankThruster* ThrusterToSet);
-
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
-
-protected:
-
-
-protected:
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
 
 public:	
 

@@ -5,7 +5,6 @@
 #include "../Public/Tank.h"
 #include "../Public/TankBarrel.h"
 #include "../Public/Projectile.h"
-#include "../Public/TankAimingComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -17,21 +16,9 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 
 }
 
-void ATank::AimAt(FVector HitLocation)
-{
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-	
-}
-
-void ATank::SetThrusterReference(UTankThruster * ThrusterToSet)
-{
-
-}
 
 void ATank::Fire()
 {
