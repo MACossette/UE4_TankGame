@@ -14,16 +14,25 @@ class BATTLETANK_API UTankThruster : public UStaticMeshComponent
 {
 	GENERATED_BODY()
 
-public:
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+public:	
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void SetForce(float Force);
 
 private:
 	UTankThruster();
 
+	virtual void BeginPlay() override;
+
+	void ApplySidewayForce();
+
+	void DriveThrusters();
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
+
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float ThrusterMaxForce = 400000;
+
+	float CurrentForce = 0.0;
 	
 };

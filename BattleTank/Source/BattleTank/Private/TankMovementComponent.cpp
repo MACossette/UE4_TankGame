@@ -13,18 +13,18 @@ void UTankMovementComponent::InitializeComponent(UTankThruster* LeftThrusterToSe
 
 void UTankMovementComponent::IntenededMoveForward(float Throw)
 {
+	if (!ensure(LeftThruster && RightThruster)) { return; }
 	LeftThruster->SetForce(Throw);
 	RightThruster->SetForce(Throw);
 
-	// TODO Prevent double speed
 }
 
 void UTankMovementComponent::IntenededTurnRight(float Throw)
 {
+	if (!ensure(LeftThruster && RightThruster)) { return; }
 	LeftThruster->SetForce(Throw);
 	RightThruster->SetForce(-Throw);
 
-	// TODO Prevent double speed
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)

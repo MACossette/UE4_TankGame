@@ -16,7 +16,6 @@ void ATankPlayerController::BeginPlay()
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	// UE_LOG(LogTemp, Warning, TEXT("Player controller ticking"));
 	AimTowardsCrosshair();
 }
 
@@ -27,7 +26,8 @@ void ATankPlayerController::AimTowardsCrosshair() const
 	if (!ensure(AimingComponent)) { return; }
 
 	FVector HitLocation = FVector (0); // Out parameter
-	if (GetSightRayHitLocation(HitLocation))
+	bool bGotHitLocation = GetSightRayHitLocation(HitLocation);
+	if (bGotHitLocation)
 	{
 		AimingComponent->AimAt(HitLocation);
 	}
@@ -47,13 +47,13 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		// Line Trace along that direction "Look direction"
-		GetLookVectorHitLocation(LookDirection, HitLocation);
+		return GetLookVectorHitLocation(LookDirection, HitLocation);
 		// UE_LOG(LogTemp, Warning, TEXT("Look direction : %s"), *LookDirection.ToString());
 	}
 
 	
 	// See what is hit to a max range
-	return true;
+	return false;
 }
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
