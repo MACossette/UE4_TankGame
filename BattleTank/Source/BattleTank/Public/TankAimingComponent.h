@@ -15,7 +15,8 @@ enum class EFiringStateStatus : uint8
 	Null,
 	Aiming,
 	Locked,
-	Reloading
+	Reloading,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -41,6 +42,9 @@ public:
 
 	EFiringStateStatus GetFiringState() const; 
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int32 GetRoundsLeft() const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -59,7 +63,7 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	UPROPERTY(EditAnyWhere, Category = "Firing")
-	float LaunchSpeed = 100000;
+	float LaunchSpeed = 5000;
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
@@ -69,5 +73,8 @@ private:
 
 	double LastFireTime = 0;
 	FVector AimDirection;
+
+	UPROPERTY(EditAnyWhere, Category = "Firing")
+	int32 RoundsLeft = 20;
 	
 };

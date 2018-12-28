@@ -31,7 +31,7 @@ private:
 	void OnHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
-	float ThrusterMaxForce = 400000;
+	float ThrusterMaxForce = 60000000.0;
 
 	float CurrentForce = 0.0;
 	

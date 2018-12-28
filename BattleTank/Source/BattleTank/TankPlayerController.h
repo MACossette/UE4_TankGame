@@ -7,6 +7,7 @@
 #include "TankPlayerController.generated.h"
 
 class UTankAimingComponent;
+class ATank;
 
 /**
  * 
@@ -35,6 +36,8 @@ public:
 	bool GetLookVectorHitLocation( FVector LookDirection, FVector& HitLocation) const;
 
 private:
+	virtual void SetPawn(APawn* InPawn) override;
+	
 	UPROPERTY(EditAnywhere)
 	float CrosshairXLocation = 0.5;
 
@@ -43,5 +46,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float LineTraceRange = 1000000.0;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 	
 };

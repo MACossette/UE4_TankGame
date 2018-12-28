@@ -40,7 +40,12 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	if (RoundsLeft <= 0)
+	{
+		CurrentFiringStatus = EFiringStateStatus::OutOfAmmo;
+	}
+	
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		CurrentFiringStatus = EFiringStateStatus::Reloading;
 	}
@@ -58,6 +63,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 EFiringStateStatus UTankAimingComponent::GetFiringState() const
 {
 	return CurrentFiringStatus;
+}
+
+int32 UTankAimingComponent::GetRoundsLeft() const
+{
+	return RoundsLeft;
 }
 
 
@@ -95,12 +105,12 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 }
 
 
-void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+void UTankAimingComponent::MoveBarrelTowards(FVector TargetAimDirection)
 {
 	if (!ensure(Barrel && Turret)) { return; }
 	// Workout the differenct between current barrel rotation and aim direction
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
-	auto AimAsRotator = AimDirection.Rotation();
+	auto AimAsRotator = TargetAimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
 	Barrel->Elevate(DeltaRotator.Pitch);
@@ -118,7 +128,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 void UTankAimingComponent::Fire()
 {
 
-	if (CurrentFiringStatus != EFiringStateStatus::Reloading) {
+	if (CurrentFiringStatus == EFiringStateStatus::Aiming || CurrentFiringStatus == EFiringStateStatus::Locked) {
 		if (!ensure(Barrel)) { return; }
 		if (!ensure(ProjectileBlueprint)) { return; }
 		// Otherwise spawn projectile at socket location
@@ -130,6 +140,8 @@ void UTankAimingComponent::Fire()
 
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
+
+		RoundsLeft--;
 
 	}
 }
